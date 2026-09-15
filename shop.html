@@ -23,7 +23,7 @@
 <section class="shop-hero">
 <p class="section-label">Acquista in negozio</p>
 <h2 class="section-title">Il nostro <em>negozio</em></h2>
-<p class="shop-hero-text">Sfoglia la nostra linea di prodotti formulata da Silvia, organizzata per categoria. Scegli quello che preferisci e invia una richiesta d'ordine: ti risponderemo su WhatsApp per confermare disponibilità. Pagamento e ritiro avvengono comodamente in studio — nessun pagamento online.</p>
+<p class="shop-hero-text">Sfoglia la nostra linea di prodotti formulata da Silvia, organizzata per categoria. Aggiungi al riepilogo quello che ti interessa e invia la richiesta via email: lo studio confermerà disponibilità, totale e orario di ritiro. Pagamento e ritiro avvengono comodamente in negozio — nessun pagamento online.</p>
 </section>
 
 <!-- CATEGORIA VISO -->
@@ -31,7 +31,7 @@
 <p class="section-label">Categoria</p>
 <h2 class="section-title">Prodotti per il <em>viso</em></h2>
 <div class="shop-grid">
-<div class="shop-card">
+<div class="shop-card" data-product="Siero Illuminante Viso" data-price="52,00">
 <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&amp;q=80" alt="Siero Illuminante Viso">
 <div class="shop-card-content">
 <div>
@@ -39,7 +39,10 @@
 <h3 class="shop-card-name">Siero Illuminante Viso</h3>
 <p class="shop-card-desc">Siero concentrato ad azione rigenerante e luminosante. Per restituire vitalità alla pelle affaticata.</p>
 </div>
+<div class="shop-card-footer">
 <p class="shop-card-price">€ 52,00</p>
+<button type="button" class="btn-add-cart">Aggiungi</button>
+</div>
 </div>
 </div>
 </div>
@@ -50,7 +53,7 @@
 <p class="section-label">Categoria</p>
 <h2 class="section-title">Prodotti per il <em>corpo</em></h2>
 <div class="shop-grid">
-<div class="shop-card">
+<div class="shop-card" data-product="Olio Rigenerante Corpo" data-price="38,00">
 <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&amp;q=80" alt="Olio Rigenerante Corpo">
 <div class="shop-card-content">
 <div>
@@ -58,10 +61,13 @@
 <h3 class="shop-card-name">Olio Rigenerante Corpo</h3>
 <p class="shop-card-desc">Formula ricca di oli vegetali pregiati per nutrire e rigenerare la pelle. Prolunga il benessere del massaggio.</p>
 </div>
+<div class="shop-card-footer">
 <p class="shop-card-price">€ 38,00</p>
+<button type="button" class="btn-add-cart">Aggiungi</button>
 </div>
 </div>
-<div class="shop-card">
+</div>
+<div class="shop-card" data-product="Scrub Esfoliante Naturale" data-price="29,00">
 <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&amp;q=80" alt="Scrub Esfoliante Naturale">
 <div class="shop-card-content">
 <div>
@@ -69,7 +75,10 @@
 <h3 class="shop-card-name">Scrub Esfoliante Naturale</h3>
 <p class="shop-card-desc">Scrub a base di ingredienti naturali per una pulizia profonda e una pelle vellutata. Perfetto prima di ogni trattamento corpo.</p>
 </div>
+<div class="shop-card-footer">
 <p class="shop-card-price">€ 29,00</p>
+<button type="button" class="btn-add-cart">Aggiungi</button>
+</div>
 </div>
 </div>
 </div>
@@ -80,7 +89,7 @@
 <p class="section-label">Categoria</p>
 <h2 class="section-title">Prodotti <em>benessere</em></h2>
 <div class="shop-grid">
-<div class="shop-card">
+<div class="shop-card" data-product="Blend Aromaterapeutico" data-price="24,00">
 <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&amp;q=80" alt="Blend Aromaterapeutico">
 <div class="shop-card-content">
 <div>
@@ -88,7 +97,10 @@
 <h3 class="shop-card-name">Blend Aromaterapeutico</h3>
 <p class="shop-card-desc">Miscela di oli essenziali puri per creare armonia e calma. Per portare l'atmosfera Unika anche a casa tua.</p>
 </div>
+<div class="shop-card-footer">
 <p class="shop-card-price">€ 24,00</p>
+<button type="button" class="btn-add-cart">Aggiungi</button>
+</div>
 </div>
 </div>
 </div>
@@ -99,32 +111,28 @@
 <div class="shop-order-inner">
 <p class="section-label" style="justify-content:center;">Richiedi ordine</p>
 <h3 class="form-title" style="text-align:center;">Il tuo ordine</h3>
-<p class="shop-order-note">Compila il modulo: la richiesta verrà inviata direttamente su WhatsApp. Ti confermeremo disponibilità, modalità di pagamento in negozio e ritiro.</p>
+<p class="shop-order-note">Clicca "Aggiungi" sui prodotti che ti interessano: il riepilogo si aggiorna qui sotto in tempo reale, insieme al totale. Compila i tuoi dati e invia la richiesta via email o su WhatsApp: lo studio ti confermerà disponibilità, totale dovuto in negozio e orario di ritiro.</p>
+
+<div id="cart-summary" class="cart-summary">
+<p class="cart-empty">Il tuo riepilogo è vuoto. Aggiungi un prodotto qui sopra.</p>
+<div class="cart-total-row" style="display:none;">
+<span>Totale dovuto in negozio</span>
+<strong id="cart-total">€ 0,00</strong>
+</div>
+</div>
+
 <form id="form-ordina">
 <div class="form-row">
 <div class="form-group"><label>Nome</label><input type="text" id="ord-nome" placeholder="Il tuo nome" required=""></div>
-<div class="form-group"><label>Telefono</label><input type="tel" id="ord-telefono" placeholder="Il tuo numero di telefono" required=""></div>
+<div class="form-group"><label>Email o telefono</label><input type="text" id="ord-contatto" placeholder="Dove possiamo risponderti" required=""></div>
 </div>
-<div class="form-group">
-<label>Prodotto</label>
-<select id="ord-prodotto" required="">
-<option value="">Seleziona un prodotto...</option>
-<optgroup label="Viso">
-<option>Siero Illuminante Viso (€ 52,00)</option>
-</optgroup>
-<optgroup label="Corpo">
-<option>Olio Rigenerante Corpo (€ 38,00)</option>
-<option>Scrub Esfoliante Naturale (€ 29,00)</option>
-</optgroup>
-<optgroup label="Benessere">
-<option>Blend Aromaterapeutico (€ 24,00)</option>
-</optgroup>
-</select>
+<div class="form-group"><label>Orario di ritiro desiderato</label><input type="text" id="ord-orario" placeholder="es. Sabato mattina, oppure giovedì alle 18:00"></div>
+<div class="form-group"><label>Note</label><textarea id="ord-note" placeholder="Preferenze o altre richieste..."></textarea></div>
+<div class="btn-row">
+<button type="button" id="btn-invia-email" class="btn-submit">Invia richiesta via email</button>
+<button type="button" id="btn-invia-whatsapp" class="btn-submit btn-whatsapp">Invia richiesta su WhatsApp</button>
 </div>
-<div class="form-group" style="max-width:160px;"><label>Quantità</label><input type="number" id="ord-quantita" min="1" value="1"></div>
-<div class="form-group"><label>Note</label><textarea id="ord-note" placeholder="Preferenze, orario di ritiro, o altre richieste..."></textarea></div>
-<button type="submit" class="btn-submit">Invia richiesta su WhatsApp</button>
-<p class="form-note">Il pagamento e il ritiro avvengono esclusivamente in negozio — nessun pagamento online. Ti risponderemo al più presto su WhatsApp.</p>
+<p class="form-note">Il totale indicato è dovuto in negozio al ritiro — nessun pagamento online. L'orario di ritiro sarà confermato dallo studio via email o telefono.</p>
 </form>
 </div>
 </section>
@@ -175,51 +183,192 @@
 <span>Privacy Policy · Cookie Policy</span>
 </div>
 </footer><script>// Unika — js/main.js
-// Unico compito: sulla pagina Negozio, il modulo "Richiedi ordine" compone
-// un messaggio e lo invia su WhatsApp al numero dello studio.
-// Nessun pagamento online: pagamento e ritiro avvengono in negozio.
+// Pagina Negozio: i clienti aggiungono prodotti a un riepilogo che si
+// aggiorna in tempo reale (nome, quantità, totale). Alla conferma
+// possono inviare la richiesta via email oppure su WhatsApp: in
+// entrambi i casi il messaggio (riepilogo, totale dovuto in negozio,
+// orario di ritiro desiderato) viene precompilato automaticamente,
+// in attesa di conferma dello studio. Nessun pagamento online: senza
+// un server non è possibile inviare in automatico, quindi si apre il
+// client di posta o WhatsApp del cliente con tutto già scritto,
+// pronto per un click.
 (function () {
+  // <-- SOSTITUISCI con l'indirizzo email reale a cui devono arrivare gli ordini
+  var EMAIL_DESTINATARIO = 'ordini@unikastudio.it';
   var WHATSAPP_NUMBER = '393759702283';
 
-  function initOrderForm() {
-    var form = document.getElementById('form-ordina');
-    if (!form) return;
+  var cart = [];
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+  function formatEuro(n) {
+    return '€ ' + n.toFixed(2).replace('.', ',');
+  }
 
+  function renderCart() {
+    var box = document.getElementById('cart-summary');
+    if (!box) return;
+    var totalRow = box.querySelector('.cart-total-row');
+    var emptyMsg = box.querySelector('.cart-empty');
+
+    var oldRows = box.querySelectorAll('.cart-row');
+    for (var i = 0; i < oldRows.length; i++) oldRows[i].remove();
+
+    if (!cart.length) {
+      if (emptyMsg) emptyMsg.style.display = '';
+      if (totalRow) totalRow.style.display = 'none';
+      return;
+    }
+    if (emptyMsg) emptyMsg.style.display = 'none';
+
+    var total = 0;
+    cart.forEach(function (item, idx) {
+      total += item.price * item.qty;
+      var row = document.createElement('div');
+      row.className = 'cart-row';
+      row.innerHTML =
+        '<span class="cart-row-name">' + item.name + '</span>' +
+        '<span class="cart-row-qty">' +
+        '<button type="button" data-act="dec" data-idx="' + idx + '">−</button>' +
+        '<span>' + item.qty + '</span>' +
+        '<button type="button" data-act="inc" data-idx="' + idx + '">+</button>' +
+        '</span>' +
+        '<span class="cart-row-price">' + formatEuro(item.price * item.qty) + '</span>' +
+        '<button type="button" class="cart-row-remove" data-act="rm" data-idx="' + idx + '">Rimuovi</button>';
+      box.insertBefore(row, totalRow);
+    });
+
+    if (totalRow) {
+      totalRow.style.display = 'flex';
+      var totalEl = document.getElementById('cart-total');
+      if (totalEl) totalEl.textContent = formatEuro(total);
+    }
+
+    var actionBtns = box.querySelectorAll('[data-act]');
+    for (var j = 0; j < actionBtns.length; j++) {
+      actionBtns[j].addEventListener('click', function (e) {
+        var idx = parseInt(e.currentTarget.getAttribute('data-idx'), 10);
+        var act = e.currentTarget.getAttribute('data-act');
+        if (act === 'inc') cart[idx].qty += 1;
+        if (act === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
+        if (act === 'rm') cart.splice(idx, 1);
+        renderCart();
+      });
+    }
+  }
+
+  function addToCart(name, price, btn) {
+    var existing = null;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].name === name) { existing = cart[i]; break; }
+    }
+    if (existing) existing.qty += 1;
+    else cart.push({ name: name, price: price, qty: 1 });
+    renderCart();
+
+    if (btn) {
+      var original = btn.textContent;
+      btn.textContent = 'Aggiunto ✓';
+      btn.classList.add('added');
+      setTimeout(function () {
+        btn.textContent = original;
+        btn.classList.remove('added');
+      }, 900);
+    }
+  }
+
+  function initShop() {
+    var addButtons = document.querySelectorAll('.btn-add-cart');
+    if (!addButtons.length) return; // non siamo nella pagina Negozio
+
+    for (var i = 0; i < addButtons.length; i++) {
+      addButtons[i].addEventListener('click', function (e) {
+        var card = e.currentTarget.closest('.shop-card');
+        if (!card) return;
+        var name = card.getAttribute('data-product') || '';
+        var price = parseFloat(card.getAttribute('data-price')) || 0;
+        addToCart(name, price, e.currentTarget);
+      });
+    }
+
+    renderCart();
+
+    function raccogliDati() {
+      if (!cart.length) {
+        alert('Aggiungi almeno un prodotto al riepilogo prima di inviare la richiesta.');
+        return null;
+      }
       var nome = (document.getElementById('ord-nome') || {}).value || '';
-      var telefono = (document.getElementById('ord-telefono') || {}).value || '';
-      var prodotto = (document.getElementById('ord-prodotto') || {}).value || '';
-      var quantita = (document.getElementById('ord-quantita') || {}).value || '1';
+      var contatto = (document.getElementById('ord-contatto') || {}).value || '';
+      var orario = (document.getElementById('ord-orario') || {}).value || '';
       var note = (document.getElementById('ord-note') || {}).value || '';
 
-      if (!nome || !telefono || !prodotto) {
-        alert('Compila nome, telefono e prodotto per inviare la richiesta.');
-        return;
+      if (!nome || !contatto) {
+        alert('Inserisci nome ed email o telefono per continuare.');
+        return null;
       }
 
-      var righe = [
-        'Ciao! Vorrei ordinare da Unika:',
-        'Prodotto: ' + prodotto,
-        'Quantità: ' + quantita,
-        'Nome: ' + nome,
-        'Telefono: ' + telefono
-      ];
-      if (note) righe.push('Note: ' + note);
-      righe.push('(Pagamento e ritiro in negozio)');
+      var totale = 0;
+      var righe = cart.map(function (item) {
+        totale += item.price * item.qty;
+        return '- ' + item.name + '  x' + item.qty + '   (' + formatEuro(item.price * item.qty) + ')';
+      });
 
-      var testo = righe.join('
+      return { nome: nome, contatto: contatto, orario: orario, note: note, righe: righe, totale: totale };
+    }
+
+    function componiMessaggio(dati) {
+      var parti = [
+        'Nuova richiesta d'ordine dal sito Unika:',
+        '',
+        dati.righe.join('
+'),
+        '',
+        'Totale dovuto in negozio: ' + formatEuro(dati.totale),
+        '',
+        'Nome: ' + dati.nome,
+        'Contatto: ' + dati.contatto,
+        'Orario di ritiro desiderato: ' + (dati.orario || 'da concordare') + ' (da confermare da parte dello studio)'
+      ];
+      if (dati.note) parti.push('Note: ' + dati.note);
+      parti.push('', '(Pagamento e ritiro esclusivamente in negozio — nessun pagamento online)');
+      return parti.join('
 ');
-      var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(testo);
-      window.open(url, '_blank');
-    });
+    }
+
+    var form = document.getElementById('form-ordina');
+    if (form) {
+      form.addEventListener('submit', function (e) { e.preventDefault(); });
+    }
+
+    var btnEmail = document.getElementById('btn-invia-email');
+    if (btnEmail) {
+      btnEmail.addEventListener('click', function () {
+        var dati = raccogliDati();
+        if (!dati) return;
+        var corpo = componiMessaggio(dati);
+        var oggetto = 'Richiesta ordine — ' + dati.nome;
+        var mailto = 'mailto:' + EMAIL_DESTINATARIO +
+          '?subject=' + encodeURIComponent(oggetto) +
+          '&body=' + encodeURIComponent(corpo);
+        window.location.href = mailto;
+      });
+    }
+
+    var btnWhatsapp = document.getElementById('btn-invia-whatsapp');
+    if (btnWhatsapp) {
+      btnWhatsapp.addEventListener('click', function () {
+        var dati = raccogliDati();
+        if (!dati) return;
+        var corpo = componiMessaggio(dati);
+        var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(corpo);
+        window.open(url, '_blank');
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initOrderForm);
+    document.addEventListener('DOMContentLoaded', initShop);
   } else {
-    initOrderForm();
+    initShop();
   }
 })();</script>
 <script src="js/main.js"></script>
