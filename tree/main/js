@@ -1,13 +1,14 @@
 // Unika — js/main.js
 // Pagina Negozio: i clienti aggiungono prodotti a un riepilogo che si
 // aggiorna in tempo reale (nome, quantità, totale). Alla conferma
-// possono inviare la richiesta via email oppure su WhatsApp: in
-// entrambi i casi il messaggio (riepilogo, totale dovuto in negozio,
-// orario di ritiro desiderato) viene precompilato automaticamente,
-// in attesa di conferma dello studio. Nessun pagamento online: senza
-// un server non è possibile inviare in automatico, quindi si apre il
-// client di posta o WhatsApp del cliente con tutto già scritto,
-// pronto per un click.
+// possono inviare la richiesta via email, su WhatsApp, oppure copiare
+// il testo dell'ordine per incollarlo manualmente altrove. In tutti i
+// casi il messaggio (riepilogo, totale dovuto in negozio, orario di
+// ritiro desiderato) viene precompilato automaticamente, in attesa di
+// conferma dello studio. Nessun pagamento online: senza un server non
+// è possibile inviare in automatico, quindi si apre il client di
+// posta o WhatsApp del cliente con tutto già scritto, pronto per un
+// click.
 (function () {
   // <-- SOSTITUISCI con l'indirizzo email reale a cui devono arrivare gli ordini
   var EMAIL_DESTINATARIO = 'ordini@unikastudio.it';
@@ -17,6 +18,14 @@
 
   function formatEuro(n) {
     return '€ ' + n.toFixed(2).replace('.', ',');
+  }
+
+  function updateSendButtonsState() {
+    var ids = ['btn-invia-email', 'btn-invia-whatsapp', 'btn-copia-testo'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (el) el.classList.toggle('disabled', cart.length === 0);
+    }
   }
 
   function renderCart() {
@@ -31,6 +40,7 @@
     if (!cart.length) {
       if (emptyMsg) emptyMsg.style.display = '';
       if (totalRow) totalRow.style.display = 'none';
+      updateSendButtonsState();
       return;
     }
     if (emptyMsg) emptyMsg.style.display = 'none';
@@ -58,17 +68,7 @@
       if (totalEl) totalEl.textContent = formatEuro(total);
     }
 
-    var actionBtns = box.querySelectorAll('[data-act]');
-    for (var j = 0; j < actionBtns.length; j++) {
-      actionBtns[j].addEventListener('click', function (e) {
-        var idx = parseInt(e.currentTarget.getAttribute('data-idx'), 10);
-        var act = e.currentTarget.getAttribute('data-act');
-        if (act === 'inc') cart[idx].qty += 1;
-        if (act === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
-        if (act === 'rm') cart.splice(idx, 1);
-        renderCart();
-      });
-    }
+    updateSendButtonsState();
   }
 
   function addToCart(name, price, btn) {
@@ -91,64 +91,79 @@
     }
   }
 
-  function initShop() {
-    var addButtons = document.querySelectorAll('.btn-add-cart');
-    if (!addButtons.length) return; // non siamo nella pagina Negozio
+  function raccogliDati() {
+    if (!cart.length) {
+      alert('Aggiungi almeno un prodotto al riepilogo prima di inviare la richiesta.');
+      return null;
+    }
+    var nome = (document.getElementById('ord-nome') || {}).value || '';
+    var contatto = (document.getElementById('ord-contatto') || {}).value || '';
+    var orario = (document.getElementById('ord-orario') || {}).value || '';
+    var note = (document.getElementById('ord-note') || {}).value || '';
 
-    for (var i = 0; i < addButtons.length; i++) {
-      addButtons[i].addEventListener('click', function (e) {
-        var card = e.currentTarget.closest('.shop-card');
+    if (!nome || !contatto) {
+      alert('Inserisci nome ed email o telefono per continuare.');
+      return null;
+    }
+
+    var totale = 0;
+    var righe = cart.map(function (item) {
+      totale += item.price * item.qty;
+      return '- ' + item.name + '  x' + item.qty + '   (' + formatEuro(item.price * item.qty) + ')';
+    });
+
+    return { nome: nome, contatto: contatto, orario: orario, note: note, righe: righe, totale: totale };
+  }
+
+  function componiMessaggio(dati) {
+    var parti = [
+      'Nuova richiesta d'ordine dal sito Unika:',
+      '',
+      dati.righe.join('
+'),
+      '',
+      'Totale dovuto in negozio: ' + formatEuro(dati.totale),
+      '',
+      'Nome: ' + dati.nome,
+      'Contatto: ' + dati.contatto,
+      'Orario di ritiro desiderato: ' + (dati.orario || 'da concordare') + ' (da confermare da parte dello studio)'
+    ];
+    if (dati.note) parti.push('Note: ' + dati.note);
+    parti.push('', '(Pagamento e ritiro esclusivamente in negozio — nessun pagamento online)');
+    return parti.join('
+');
+  }
+
+  function initShop() {
+    var cartBox = document.getElementById('cart-summary');
+    if (!cartBox) return; // non siamo nella pagina Negozio
+
+    // Delega l'ascolto del click a tutto il documento: così funziona anche
+    // per schede prodotto aggiunte DOPO il caricamento della pagina (blocco
+    // "Scheda prodotto", duplicazioni con l'editor, ecc.), non solo per
+    // quelle presenti all'avvio.
+    document.addEventListener('click', function (e) {
+      var addBtn = e.target.closest('.btn-add-cart');
+      if (addBtn) {
+        var card = addBtn.closest('.shop-card');
         if (!card) return;
         var name = card.getAttribute('data-product') || '';
         var price = parseFloat(card.getAttribute('data-price')) || 0;
-        addToCart(name, price, e.currentTarget);
-      });
-    }
+        addToCart(name, price, addBtn);
+        return;
+      }
+      var qtyBtn = e.target.closest('[data-act]');
+      if (qtyBtn && cartBox.contains(qtyBtn)) {
+        var idx = parseInt(qtyBtn.getAttribute('data-idx'), 10);
+        var act = qtyBtn.getAttribute('data-act');
+        if (act === 'inc') cart[idx].qty += 1;
+        if (act === 'dec') { cart[idx].qty -= 1; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
+        if (act === 'rm') cart.splice(idx, 1);
+        renderCart();
+      }
+    });
 
     renderCart();
-
-    function raccogliDati() {
-      if (!cart.length) {
-        alert('Aggiungi almeno un prodotto al riepilogo prima di inviare la richiesta.');
-        return null;
-      }
-      var nome = (document.getElementById('ord-nome') || {}).value || '';
-      var contatto = (document.getElementById('ord-contatto') || {}).value || '';
-      var orario = (document.getElementById('ord-orario') || {}).value || '';
-      var note = (document.getElementById('ord-note') || {}).value || '';
-
-      if (!nome || !contatto) {
-        alert('Inserisci nome ed email o telefono per continuare.');
-        return null;
-      }
-
-      var totale = 0;
-      var righe = cart.map(function (item) {
-        totale += item.price * item.qty;
-        return '- ' + item.name + '  x' + item.qty + '   (' + formatEuro(item.price * item.qty) + ')';
-      });
-
-      return { nome: nome, contatto: contatto, orario: orario, note: note, righe: righe, totale: totale };
-    }
-
-    function componiMessaggio(dati) {
-      var parti = [
-        'Nuova richiesta d'ordine dal sito Unika:',
-        '',
-        dati.righe.join('
-'),
-        '',
-        'Totale dovuto in negozio: ' + formatEuro(dati.totale),
-        '',
-        'Nome: ' + dati.nome,
-        'Contatto: ' + dati.contatto,
-        'Orario di ritiro desiderato: ' + (dati.orario || 'da concordare') + ' (da confermare da parte dello studio)'
-      ];
-      if (dati.note) parti.push('Note: ' + dati.note);
-      parti.push('', '(Pagamento e ritiro esclusivamente in negozio — nessun pagamento online)');
-      return parti.join('
-');
-    }
 
     var form = document.getElementById('form-ordina');
     if (form) {
@@ -179,6 +194,26 @@
         window.open(url, '_blank');
       });
     }
+
+    var btnCopia = document.getElementById('btn-copia-testo');
+    if (btnCopia) {
+      btnCopia.addEventListener('click', function () {
+        var dati = raccogliDati();
+        if (!dati) return;
+        var corpo = componiMessaggio(dati);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(corpo).then(function () {
+            alert('Testo dell'ordine copiato! Ora puoi incollarlo dove preferisci (Instagram, SMS, ecc.).');
+          }, function () {
+            window.prompt('Copia manualmente il testo qui sotto (Ctrl+C / Cmd+C):', corpo);
+          });
+        } else {
+          window.prompt('Copia manualmente il testo qui sotto (Ctrl+C / Cmd+C):', corpo);
+        }
+      });
+    }
+
+    updateSendButtonsState();
   }
 
   if (document.readyState === 'loading') {
