@@ -304,6 +304,14 @@ nav { padding: 1.2rem 1.8rem; } .nav-links { display: none; }
 .btn-row .btn-submit { flex: 1; min-width: 220px; text-align: center; }
 .btn-whatsapp { background: #3f7d5c; }
 .btn-whatsapp:hover { background: #4d9470; }
+.btn-copy {
+  display: block; width: 100%; background: transparent; border: 1px solid rgba(139,115,85,0.35);
+  color: var(--sage-deep); padding: 0.7rem 1rem; font-size: 0.75rem; letter-spacing: 0.05em;
+  text-transform: uppercase; cursor: pointer; margin-top: 0.8rem; font-family: var(--font-body);
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-copy:hover { background: var(--cream); border-color: var(--sage-deep); }
+.btn-submit.disabled, .btn-copy.disabled { opacity: 0.45; pointer-events: none; }
 
 @media (max-width: 900px) {
   .shop-hero, .shop-category, .shop-order { padding: 5rem 2.5rem; }
